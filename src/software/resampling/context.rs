@@ -179,6 +179,17 @@ impl Context {
         }
     }
 
+    /// Converts the next timestamp from input time to output time.
+    ///
+    /// Timestamps are in `1 / (in_sample_rate * out_sample_rate)` units.
+    ///
+    /// `pts` specifies the timestamp for the next input sample. Pass `None` to determine
+    /// automatically.
+    pub fn next_pts(&mut self, pts: Option<i64>) -> i64 {
+        let pts = pts.unwrap_or(i64::MIN);
+        unsafe { swr_next_pts(self.as_mut_ptr(), pts) }
+    }
+
     /// Convert one of the remaining internal frames.
     ///
     /// When there are no more internal frames `Ok(None)` will be returned.
